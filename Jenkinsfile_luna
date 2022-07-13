@@ -16,7 +16,7 @@ pipeline {
           --veracode_api_key "${VERACODE_API_SECRET}" \
           --file "app/target/verademo.war" \
           --fail_on_severity="Very High, High" \
-          --fail_on_cwe="80"          
+          --fail_on_cwe="80" \         
         }
       }
     }
