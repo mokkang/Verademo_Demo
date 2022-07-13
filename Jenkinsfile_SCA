@@ -104,9 +104,8 @@ pipeline {
                                         """
                             }
                            
-                        } catch (err) {
-                            echo 'Pipeline err: ' + err
-                        }
+                     
+                         
                     }
                 }
             }
