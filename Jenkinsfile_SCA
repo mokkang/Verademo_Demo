@@ -78,7 +78,7 @@ pipeline {
                 withCredentials([ string(credentialsId: 'SCA_Token', variable: 'SRCCLR_API_TOKEN')]) {
                     withMaven(maven:'maven-3') {
                         script {
-                                sh "curl -sSL https://download.sourceclear.com/ci.sh | sh -s -- scan . --update-advisor --allow-dirty"
+                                sh "curl -sSL https://download.sourceclear.com/ci.sh | sh -s -- scan ./app --update-advisor --allow-dirty"
                             
                    
                               
