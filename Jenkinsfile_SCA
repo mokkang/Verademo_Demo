@@ -78,16 +78,15 @@ pipeline {
                 withCredentials([ string(credentialsId: 'SCA_Token', variable: 'SRCCLR_API_TOKEN')]) {
                     withMaven(maven:'maven-3') {
                         script {
-                            if(isUnix() == true) {
                                 sh "curl -sSL https://download.sourceclear.com/ci.sh | sh -s -- scan . --update-advisor --allow-dirty"
                             }
-                            else {
-                                powershell '''
+                   
+                               //* powershell '''
                                             Set-ExecutionPolicy AllSigned -Scope Process -Force
                                             $ProgressPreference = "silentlyContinue"
                                             iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1'))
                                             srcclr scan . --update-advisor --allow-dirty
-                                            '''
+                                            ''' *//
                             }
                         }
                     }
@@ -112,7 +111,7 @@ pipeline {
                                             --file target/verademo.war --issue_details true --verbose true --fail_on_severity="Very High, High" --fail_on_criteria="79,80,113"
                                         """
                             }
-                            else {
+                            //*else {
                                 powershell """
                                             curl  https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip -o pipeline-scan.zip
                                             Expand-Archive -Path pipeline-scan.zip -DestinationPath veracode_scanner
@@ -120,7 +119,7 @@ pipeline {
                                             --veracode_api_key '${VERACODE_API_KEY}' \
                                             --file target/verademo.war --issue_details true --verbose true --fail_on_severity="Very High, High" --fail_on_criteria="79,80,113"
                                             """
-                            }
+                            } *//
                         } catch (err) {
                             echo 'Pipeline err: ' + err
                         }
