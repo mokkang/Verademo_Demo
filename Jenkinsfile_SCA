@@ -42,10 +42,10 @@ pipeline {
                 withMaven(maven:'maven-3') {
                     script {
                         if(isUnix() == true) {
-                            sh 'mvn clean package'
+                            sh 'mvn clean package --file app/pom.xml'
                         }
                         else {
-                            bat 'mvn clean package'
+                            bat 'mvn clean package --file app/pom.xml'
                         }
                     }
                 }
@@ -68,9 +68,6 @@ pipeline {
                         credentialsId: 'veracode_login', usernameVariable: 'VERACODE_API_ID', passwordVariable: 'VERACODE_API_KEY') ]) {
                     // fire-and-forget 
                     veracode applicationName: "${VERACODE_APP_NAME}", criticality: 'VeryHigh', debug: true, fileNamePattern: '', pHost: '', pPassword: '', pUser: '', replacementPattern: '', sandboxName: '', scanExcludesPattern: '', scanIncludesPattern: '', scanName: "${BUILD_TAG}-${env.HOST_OS}", uploadExcludesPattern: '', uploadIncludesPattern: 'target/verademo.war', vid: "${VERACODE_API_ID}", vkey: "${VERACODE_API_KEY}"
-
-                    // wait for scan to complete (timeout: x)
-                    //veracode applicationName: '${VERACODE_APP_NAME}'', criticality: 'VeryHigh', debug: true, timeout: 20, fileNamePattern: '', pHost: '', pPassword: '', pUser: '', replacementPattern: '', sandboxName: '', scanExcludesPattern: '', scanIncludesPattern: '', scanName: "${BUILD_TAG}", uploadExcludesPattern: '', uploadIncludesPattern: 'target/verademo.war', vid: '${VERACODE_API_ID}', vkey: '${VERACODE_API_KEY}'
                 }
             }
         }
@@ -83,9 +80,6 @@ pipeline {
                         script {
                             if(isUnix() == true) {
                                 sh "curl -sSL https://download.sourceclear.com/ci.sh | sh -s -- scan . --update-advisor --allow-dirty"
-
-                                // debug, no upload
-                                //sh "curl -sSL https://download.sourceclear.com/ci.sh | DEBUG=1 sh -s -- scan --no-upload"
                             }
                             else {
                                 powershell '''
@@ -108,12 +102,6 @@ pipeline {
                         credentialsId: 'veracode_login', usernameVariable: 'VERACODE_API_ID', passwordVariable: 'VERACODE_API_KEY') ]) {
                     script {
 
-                        // this try-catch block will show the flaws in the Jenkins log, and yet not
-                        // fail the build due to any flaws reported in the pipeline scan
-                        // alternately, you could add --fail_on_severity '', but that would not show the
-                        // flaws in the Jenkins log
-
-                        // issue_details true: add flaw details to the results.json file
                         try {
                             if(isUnix() == true) {
                                 sh """
@@ -133,7 +121,7 @@ pipeline {
                                             --file target/verademo.war --issue_details true --verbose true --fail_on_severity="Very High, High" --fail_on_criteria="79,80,113"
                                             """
                             }
-                        } catch (err) {
+                         catch (err) {
                             echo 'Pipeline err: ' + err
                         }
                     }
