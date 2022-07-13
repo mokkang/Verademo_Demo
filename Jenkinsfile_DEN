@@ -1,0 +1,19 @@
+pipeline {
+    agent any
+	stages {
+        stage('Build') {
+            steps{
+			    sh 'mvn package' 
+                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true 
+			}
+        stage('PIPELINE')
+          steps{
+            '''
+        curl https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip -o pipeline-scan.zip
+                              unzip -u pipeline-scan.zip pipeline-scan.jar
+                              java -jar pipeline-scan.jar --veracode_api_id '${VERACODE_API_ID}' --veracode_api_key '${VERACODE_API_KEY}' --file app/target/verademo.war --baseline results.json --issue_details true
+            '''
+          }
+      }
+    }
+}
