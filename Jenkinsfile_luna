@@ -1,5 +1,5 @@
 pipeline {
-  agent { 'ubuntu:latest' }
+  agent { 'ubuntu' }
   stages {
     stage('Maven Build') {
       steps {
