@@ -6,12 +6,14 @@ pipeline {
       scripts {
         script {
           sh 'mvn clean install --file app/pom.xml'
+     stage('Pipeline Scan') {
           sh 'curl -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip'
         sh 'unzip pipeline-scan-LATEST.zip pipeline-scan.jar'
         sh 'java -jar pipeline-scan.jar --veracode_api_id "${VERACODE_API_ID}" --veracode_api_key "${VERACODE_API_KEY}" --file "app/target/verademo.war"'
+            }
+          }
+        }
       }
     }
   }
-  }
-}
 }
