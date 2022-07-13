@@ -25,7 +25,7 @@ pipeline {
           }
       }
    }
-      stage ('Pipeline') {
+      stage('Pipeline') {
          steps {
             echo 'Veracode Pipeline scanning'
             withCredentials([ usernamePassword (credentialsId: 'veracode_login', usernameVariable: 'VERACODE_API_ID', passwordVariable: 'VERACODE_API_KEY') ]) {
