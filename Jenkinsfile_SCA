@@ -11,13 +11,7 @@ pipeline {
         VERACODE_APP_NAME = 'Verademo-pipeline'      // App Name in the Veracode Platform
     }
 
-   script {
-      echo "##################################################################################################"
-      echo "Jenkins Pipeline Scan Begin" 
-      echo "##################################################################################################"
-   } 
-
-    stages {
+   stages {
         stage ('environment verify') {
             steps {
                 script {
