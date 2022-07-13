@@ -2,13 +2,13 @@ pipeline {
    agent any
 
    stages {
-      stage('Verify Branch') {
-         steps {
+      steps('Verify Branch') {
+         step {
             echo "$GIT_BRANCH"
          }
       }
       stage('Package') {
-         steps {
+         step {
             echo "package"
             sh (script: """
                 mvn -f app/pom.xml clean package
@@ -17,7 +17,7 @@ pipeline {
             }
       }
       stage('Policy') {
-          steps {
+          step {
               withCredentials([usernamePassword(credentialsId: 'veracode-credentials', passwordVariable: '$veracode_key', usernameVariable: '$veracode_id')]) {
                   // fire-and-forget
                   veracode applicationName: 'Verademo', canFailJob: true, createSandbox: true, criticality: 'High', debug: true, fileNamePattern: '', replacementPattern: '', sandboxName: 'Jenkins Pipeline', scanExcludesPattern: '', scanIncludesPattern: '', scanName: "${BUILD_TAG}", teams: '', uploadExcludesPattern: '', uploadIncludesPattern: '**/**.war', vid: "${$veracode_id}", vkey: "${$veracode_key}"
@@ -26,7 +26,7 @@ pipeline {
       }
    }
       stage('Pipeline') {
-         steps {
+         step {
             echo 'Veracode Pipeline scanning'
             withCredentials([ usernamePassword (credentialsId: 'veracode_login', usernameVariable: 'VERACODE_API_ID', passwordVariable: 'VERACODE_API_KEY') ]) {
                   script {
