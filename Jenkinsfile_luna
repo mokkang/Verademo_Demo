@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Maven Build') {
       steps {
-        sh 'maven clean verify'
+        sh 'maven clean package -f app/pom.xml'
       }
     }
     stage('Veracode Pipeline Scan') {
@@ -13,7 +13,7 @@ pipeline {
         sh 'java -jar pipeline-scan.jar \
           --veracode_api_id "${VERACODE_API_ID}" \
           --veracode_api_key "${VERACODE_API_SECRET}" \
-          --file "build/libs/sample.jar" \
+          --file "app/target/verademo.war" \
           --fail_on_severity="Very High, High" \
           --fail_on_cwe="80" \
           --baseline_file "${CI_BASELINE_PATH}" \
