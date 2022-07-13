@@ -121,7 +121,7 @@ pipeline {
                                             --file target/verademo.war --issue_details true --verbose true --fail_on_severity="Very High, High" --fail_on_criteria="79,80,113"
                                             """
                             }
-                         catch (err) {
+                        } catch (err) {
                             echo 'Pipeline err: ' + err
                         }
                     }
