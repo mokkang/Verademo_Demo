@@ -3,10 +3,12 @@ pipeline {
   stages {
     stage('Maven Build') {
       steps {
-      script {
-        sh 'mvn clean install --file app/pom.xml'
+      scripts {
+        script {
+          sh 'mvn clean install --file app/pom.xml'
       }
     }
+  }
   }
     stage('Veracode Pipeline Scan') {
       steps {
